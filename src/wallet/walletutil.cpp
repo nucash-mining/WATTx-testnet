@@ -48,7 +48,9 @@ WalletFeature GetClosestWalletFeature(int version)
 
 WalletDescriptor GenerateWalletDescriptor(const CExtPubKey& master_key, const OutputType& addr_type, bool internal)
 {
-    int64_t creation_time = GetTime();
+    // Set creation_time to 0 to ensure wallet scans from genesis block
+    // This prevents the wallet from skipping existing blocks when first created
+    int64_t creation_time = 0;
 
     std::string xpub = EncodeExtPubKey(master_key);
 

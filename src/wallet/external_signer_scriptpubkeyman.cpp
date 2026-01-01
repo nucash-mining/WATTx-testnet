@@ -27,7 +27,9 @@ bool ExternalSignerScriptPubKeyMan::SetupDescriptor(WalletBatch& batch, std::uni
     assert(m_storage.IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS));
     assert(m_storage.IsWalletFlagSet(WALLET_FLAG_EXTERNAL_SIGNER));
 
-    int64_t creation_time = GetTime();
+    // Set creation_time to 0 to ensure wallet scans from genesis block
+    // This prevents the wallet from skipping existing blocks when first created
+    int64_t creation_time = 0;
 
     // Make the descriptor
     WalletDescriptor w_desc(std::move(desc), creation_time, 0, 0, 0);
