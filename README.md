@@ -25,12 +25,12 @@ Key Features
 Downloads
 ---------
 
-### Latest Release: [v1.0.1](https://github.com/nucash-mining/WATTx/releases/tag/v1.0.1)
+### Latest Release: [v1.0.1](https://github.com/The-Mining-Game/WATTx/releases/tag/v1.0.1)
 
 | Platform | Download |
 |----------|----------|
-| Linux (x86_64) | [wattx-linux64-v1.0.1.tar.gz](https://github.com/nucash-mining/WATTx/releases/download/v1.0.1/wattx-linux64-v1.0.1.tar.gz) |
-| Windows (x86_64) | [wattx-win64-v1.0.1.zip](https://github.com/nucash-mining/WATTx/releases/download/v1.0.1/wattx-win64-v1.0.1.zip) |
+| Linux (x86_64) | [wattx-linux64-v1.0.1.tar.gz](https://github.com/The-Mining-Game/WATTx/releases/download/v1.0.1/wattx-linux64-v1.0.1.tar.gz) |
+| Windows (x86_64) | [wattx-win64-v1.0.1.zip](https://github.com/The-Mining-Game/WATTx/releases/download/v1.0.1/wattx-win64-v1.0.1.zip) |
 
 **Included binaries:** `wattxd`, `wattx-qt`, `wattx-cli`, `wattx-tx`, `wattx-wallet`
 
