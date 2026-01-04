@@ -20,11 +20,27 @@
 #include <list>
 #include <memory>
 #include <mutex>
-#include <source_location>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+
+// source_location compatibility for compilers that don't support it (e.g., GCC < 11)
+#if defined(__cpp_lib_source_location) && __cpp_lib_source_location >= 201907L
+#include <source_location>
+#define HAVE_SOURCE_LOCATION 1
+#else
+#define HAVE_SOURCE_LOCATION 0
+namespace std {
+struct source_location {
+    static constexpr source_location current() noexcept { return source_location{}; }
+    constexpr uint_least32_t line() const noexcept { return 0; }
+    constexpr uint_least32_t column() const noexcept { return 0; }
+    constexpr const char* file_name() const noexcept { return ""; }
+    constexpr const char* function_name() const noexcept { return ""; }
+};
+}
+#endif
 
 static const bool DEFAULT_LOGTIMEMICROS = false;
 static const bool DEFAULT_LOGIPS        = false;

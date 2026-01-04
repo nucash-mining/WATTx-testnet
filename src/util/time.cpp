@@ -12,10 +12,18 @@
 
 #include <atomic>
 #include <chrono>
+#include <ctime>
 #include <optional>
 #include <string>
 #include <string_view>
 #include <thread>
+
+// Check for C++20 calendar types availability
+#if defined(__cpp_lib_chrono) && __cpp_lib_chrono >= 201907L
+#define HAVE_CHRONO_CALENDAR 1
+#else
+#define HAVE_CHRONO_CALENDAR 0
+#endif
 
 void UninterruptibleSleep(const std::chrono::microseconds& n) { std::this_thread::sleep_for(n); }
 
@@ -77,19 +85,37 @@ int64_t GetTime() { return GetTime<std::chrono::seconds>().count(); }
 
 std::string FormatISO8601DateTime(int64_t nTime)
 {
+#if HAVE_CHRONO_CALENDAR
     const std::chrono::sys_seconds secs{std::chrono::seconds{nTime}};
     const auto days{std::chrono::floor<std::chrono::days>(secs)};
     const std::chrono::year_month_day ymd{days};
     const std::chrono::hh_mm_ss hms{secs - days};
     return strprintf("%04i-%02u-%02uT%02i:%02i:%02iZ", signed{ymd.year()}, unsigned{ymd.month()}, unsigned{ymd.day()}, hms.hours().count(), hms.minutes().count(), hms.seconds().count());
+#else
+    // Fallback for compilers without C++20 calendar types
+    std::time_t time = static_cast<std::time_t>(nTime);
+    std::tm* gmt = std::gmtime(&time);
+    if (!gmt) return "";
+    return strprintf("%04i-%02u-%02uT%02i:%02i:%02iZ",
+        gmt->tm_year + 1900, gmt->tm_mon + 1, gmt->tm_mday,
+        gmt->tm_hour, gmt->tm_min, gmt->tm_sec);
+#endif
 }
 
 std::string FormatISO8601Date(int64_t nTime)
 {
+#if HAVE_CHRONO_CALENDAR
     const std::chrono::sys_seconds secs{std::chrono::seconds{nTime}};
     const auto days{std::chrono::floor<std::chrono::days>(secs)};
     const std::chrono::year_month_day ymd{days};
     return strprintf("%04i-%02u-%02u", signed{ymd.year()}, unsigned{ymd.month()}, unsigned{ymd.day()});
+#else
+    // Fallback for compilers without C++20 calendar types
+    std::time_t time = static_cast<std::time_t>(nTime);
+    std::tm* gmt = std::gmtime(&time);
+    if (!gmt) return "";
+    return strprintf("%04i-%02u-%02u", gmt->tm_year + 1900, gmt->tm_mon + 1, gmt->tm_mday);
+#endif
 }
 
 std::optional<int64_t> ParseISO8601DateTime(std::string_view str)
@@ -107,6 +133,7 @@ std::optional<int64_t> ParseISO8601DateTime(std::string_view str)
     if (!year || !month || !day || !hour || !min || !sec) {
         return {};
     }
+#if HAVE_CHRONO_CALENDAR
     const std::chrono::year_month_day ymd{std::chrono::year{*year}, std::chrono::month{*month}, std::chrono::day{*day}};
     if (!ymd.ok()) {
         return {};
@@ -114,6 +141,29 @@ std::optional<int64_t> ParseISO8601DateTime(std::string_view str)
     const auto time{std::chrono::hours{*hour} + std::chrono::minutes{*min} + std::chrono::seconds{*sec}};
     const auto tp{std::chrono::sys_days{ymd} + time};
     return int64_t{TicksSinceEpoch<std::chrono::seconds>(tp)};
+#else
+    // Fallback for compilers without C++20 calendar types
+    std::tm tm{};
+    tm.tm_year = *year - 1900;
+    tm.tm_mon = *month - 1;
+    tm.tm_mday = *day;
+    tm.tm_hour = *hour;
+    tm.tm_min = *min;
+    tm.tm_sec = *sec;
+    tm.tm_isdst = 0;
+    // Validate basic ranges
+    if (*month < 1 || *month > 12 || *day < 1 || *day > 31 ||
+        *hour > 23 || *min > 59 || *sec > 59) {
+        return {};
+    }
+#ifdef _WIN32
+    std::time_t result = _mkgmtime(&tm);
+#else
+    std::time_t result = timegm(&tm);
+#endif
+    if (result == -1) return {};
+    return static_cast<int64_t>(result);
+#endif
 }
 
 struct timeval MillisToTimeval(int64_t nTimeout)

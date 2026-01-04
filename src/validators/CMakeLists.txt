@@ -11,4 +11,5 @@ target_link_libraries(wattx_validators
   PRIVATE
     core_interface
     bitcoin_crypto
+    Boost::headers
 )

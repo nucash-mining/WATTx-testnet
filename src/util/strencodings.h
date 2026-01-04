@@ -14,8 +14,25 @@
 #include <util/string.h>
 
 #include <array>
-#include <bit>
 #include <charconv>
+#include <cstring>
+
+// std::bit_cast compatibility for compilers that don't support it (e.g., GCC < 11)
+#if defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806L
+#include <bit>
+#else
+namespace std {
+template <typename To, typename From>
+inline To bit_cast(const From& src) noexcept {
+    static_assert(sizeof(To) == sizeof(From), "bit_cast requires same size types");
+    static_assert(std::is_trivially_copyable<From>::value, "bit_cast requires trivially copyable source");
+    static_assert(std::is_trivially_copyable<To>::value, "bit_cast requires trivially copyable destination");
+    To dst;
+    std::memcpy(&dst, &src, sizeof(To));
+    return dst;
+}
+}
+#endif
 #include <cstddef>
 #include <cstdint>
 #include <limits>
@@ -433,7 +450,17 @@ template <util::detail::Hex str>
 constexpr auto operator""_hex() { return str.bytes; }
 
 template <util::detail::Hex str>
+#if defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806L
 constexpr auto operator""_hex_u8() { return std::bit_cast<std::array<uint8_t, str.bytes.size()>>(str.bytes); }
+#else
+inline auto operator""_hex_u8() {
+    std::array<uint8_t, str.bytes.size()> result;
+    for (size_t i = 0; i < str.bytes.size(); ++i) {
+        result[i] = static_cast<uint8_t>(str.bytes[i]);
+    }
+    return result;
+}
+#endif
 
 template <util::detail::Hex str>
 constexpr auto operator""_hex_v() { return std::vector<std::byte>{str.bytes.begin(), str.bytes.end()}; }

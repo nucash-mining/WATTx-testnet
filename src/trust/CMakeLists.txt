@@ -12,4 +12,5 @@ target_link_libraries(wattx_trust
     core_interface
     bitcoin_crypto
     bitcoin_consensus
+    Boost::headers
 )
