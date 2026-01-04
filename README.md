@@ -22,6 +22,18 @@ Key Features
 
 6. **Bitcoin-like Tokenomics** - ~21 million total supply with halving schedule
 
+Downloads
+---------
+
+### Latest Release: [v1.0.1](https://github.com/nucash-mining/WATTx-testnet/releases/tag/v1.0.1)
+
+| Platform | Download |
+|----------|----------|
+| Linux (x86_64) | [wattx-linux64-v1.0.1.tar.gz](https://github.com/nucash-mining/WATTx-testnet/releases/download/v1.0.1/wattx-linux64-v1.0.1.tar.gz) |
+| Windows (x86_64) | [wattx-win64-v1.0.1.zip](https://github.com/nucash-mining/WATTx-testnet/releases/download/v1.0.1/wattx-win64-v1.0.1.zip) |
+
+**Included binaries:** `wattxd`, `wattx-qt`, `wattx-cli`, `wattx-tx`, `wattx-wallet`
+
 Network Parameters
 ------------------
 
