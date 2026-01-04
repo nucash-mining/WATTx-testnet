@@ -9,7 +9,7 @@
 #include <QRegularExpressionMatchIterator>
 #include <QTimer>
 
-#define paternVersion "qtum-([0-9]+\\.)?([0-9]+\\.)?([0-9]+)-"
+#define paternVersion "wattx-([0-9]+\\.)?([0-9]+\\.)?([0-9]+)-"
 
 QtumVersionChecker::QtumVersionChecker(QObject *parent) : QObject(parent)
 {
@@ -53,7 +53,7 @@ QList<Version> QtumVersionChecker::getVersions()
             while (regExIt.hasNext())
             {
                 QRegularExpressionMatch match = regExIt.next();
-                QString versionString = match.captured().mid(5, match.captured().length() - 6); // get version string in format XX.XX.XX
+                QString versionString = match.captured().mid(6, match.captured().length() - 7); // get version string in format XX.XX.XX (skip "wattx-" prefix)
                 Version version(versionString);
                 if(!versions.contains(version))
                 {
