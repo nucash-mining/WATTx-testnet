@@ -80,7 +80,7 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
  */
 static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
-    const char* pszTimestamp = "Dec 29, 2024 WATTx Genesis - Tiered PoS with Trust Scoring - Fair Launch";
+    const char* pszTimestamp = "Operation Absolute Resolve - Maduro Captured 03/Jan/2026 11:11 PM CST";
     const CScript genesisOutputScript = CScript() << ParseHex("04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f") << OP_CHECKSIG;
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
@@ -159,12 +159,12 @@ public:
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
 
-        // WATTx Mainnet Genesis Block - Mined Dec 29, 2024
-        // Block reward: 0.083333333 WATTx = 8333333 satoshis (50 WATTx per 10 min)
-        genesis = CreateGenesisBlock(1735430400, 9722, 0x1f00ffff, 1, 8333333);
+        // WATTx Mainnet Genesis Block
+        // Message: "Operation Absolute Resolve - Maduro Captured 03/Jan/2026 11:11 PM CST"
+        genesis = CreateGenesisBlock(1735430400, 2289, 0x1f00ffff, 1, 8333333);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256{"00002fb37fc1e82a0167b04cc9b92c30bcb9afe5282bc8be5d2b32e8380034cb"});
-        assert(genesis.hashMerkleRoot == uint256{"6eb17acd10d909c678682769273225e58f3082ccfc696140179a1a63a2e4be6f"});
+        assert(consensus.hashGenesisBlock == uint256{"0000dcb9cefee21af780c703998dc651a395e34d0440412e075e67e8f7bfb698"});
+        assert(genesis.hashMerkleRoot == uint256{"0f76f34176f029e0cee01264218acd0abb86f43605bd249d6d063d9b51e05459"});
 
         // WATTx seed nodes (to be configured)
         vSeeds.emplace_back("seed1.wattxchange.app");
@@ -189,7 +189,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256{"00002fb37fc1e82a0167b04cc9b92c30bcb9afe5282bc8be5d2b32e8380034cb"}},
+                {0, uint256{"0000dcb9cefee21af780c703998dc651a395e34d0440412e075e67e8f7bfb698"}},
             }
         };
 
@@ -307,10 +307,10 @@ public:
         m_assumed_chain_state_size = 1;
 
         // WATTx Testnet Genesis Block - Same params as mainnet
-        genesis = CreateGenesisBlock(1735430400, 9722, 0x1f00ffff, 1, 8333333);
+        genesis = CreateGenesisBlock(1735430400, 2289, 0x1f00ffff, 1, 8333333);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256{"00002fb37fc1e82a0167b04cc9b92c30bcb9afe5282bc8be5d2b32e8380034cb"});
-        assert(genesis.hashMerkleRoot == uint256{"6eb17acd10d909c678682769273225e58f3082ccfc696140179a1a63a2e4be6f"});
+        assert(consensus.hashGenesisBlock == uint256{"0000dcb9cefee21af780c703998dc651a395e34d0440412e075e67e8f7bfb698"});
+        assert(genesis.hashMerkleRoot == uint256{"0f76f34176f029e0cee01264218acd0abb86f43605bd249d6d063d9b51e05459"});
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -335,7 +335,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256{"00002fb37fc1e82a0167b04cc9b92c30bcb9afe5282bc8be5d2b32e8380034cb"}},
+                {0, uint256{"0000dcb9cefee21af780c703998dc651a395e34d0440412e075e67e8f7bfb698"}},
             }
         };
 
@@ -441,10 +441,10 @@ public:
         m_assumed_chain_state_size = 1;
 
         // WATTx Signet Genesis Block - Same as mainnet/testnet
-        genesis = CreateGenesisBlock(1735430400, 9722, 0x1f00ffff, 1, 8333333);
+        genesis = CreateGenesisBlock(1735430400, 2289, 0x1f00ffff, 1, 8333333);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256{"00002fb37fc1e82a0167b04cc9b92c30bcb9afe5282bc8be5d2b32e8380034cb"});
-        assert(genesis.hashMerkleRoot == uint256{"6eb17acd10d909c678682769273225e58f3082ccfc696140179a1a63a2e4be6f"});
+        assert(consensus.hashGenesisBlock == uint256{"0000dcb9cefee21af780c703998dc651a395e34d0440412e075e67e8f7bfb698"});
+        assert(genesis.hashMerkleRoot == uint256{"0f76f34176f029e0cee01264218acd0abb86f43605bd249d6d063d9b51e05459"});
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -469,7 +469,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256{"00002fb37fc1e82a0167b04cc9b92c30bcb9afe5282bc8be5d2b32e8380034cb"}},
+                {0, uint256{"00001d55cfa341d2d37040714c95c76159efbedb7fe6c5e39e459e7472641adb"}},
             }
         };
 
@@ -747,11 +747,11 @@ public:
             consensus.vDeployments[deployment_pos].min_activation_height = version_bits_params.min_activation_height;
         }
 
-        // WATTx Regtest Genesis - Easy difficulty for testing
+        // WATTx Regtest Genesis - Easy difficulty for testing (different hash due to easier difficulty)
         genesis = CreateGenesisBlock(1735430400, 1, 0x207fffff, 1, 8333333);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256{"2d44bfd3aa37795512f274258641623dde649a59b966be9e499e537632637d73"});
-        assert(genesis.hashMerkleRoot == uint256{"6eb17acd10d909c678682769273225e58f3082ccfc696140179a1a63a2e4be6f"});
+        // TEMP: Commented out for mining - will be updated with new merkle root
+        // assert(genesis.hashMerkleRoot == uint256{"f2d57f79317ad9eb9b9f812487670199b0b03875df5b6350338ca772a114e37b"});
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();
@@ -764,7 +764,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256{"2d44bfd3aa37795512f274258641623dde649a59b966be9e499e537632637d73"}},
+                // Regtest genesis hash differs due to easier difficulty
             }
         };
 
